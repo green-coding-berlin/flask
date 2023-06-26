@@ -1,5 +1,9 @@
 name: Tests
 on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 1,5 * * *'
+
   push:
     branches:
       - main
@@ -25,8 +29,8 @@ jobs:
       matrix:
         include:
           - {name: Linux, python: '3.11', os: ubuntu-latest, tox: py311}
-          - {name: Windows, python: '3.11', os: windows-latest, tox: py311}
-          - {name: Mac, python: '3.11', os: macos-latest, tox: py311}
+          # - {name: Windows, python: '3.11', os: windows-latest, tox: py311}
+          # - {name: Mac, python: '3.11', os: macos-latest, tox: py311}
           - {name: '3.12-dev', python: '3.12-dev', os: ubuntu-latest, tox: py312}
           - {name: '3.10', python: '3.10', os: ubuntu-latest, tox: py310}
           - {name: '3.9', python: '3.9', os: ubuntu-latest, tox: py39}
@@ -36,6 +40,11 @@ jobs:
           - {name: 'Development Versions', python: '3.8', os: ubuntu-latest, tox: py38-dev}
           - {name: Typing, python: '3.11', os: ubuntu-latest, tox: typing}
     steps:
+      - name: Eco-CI Init
+        uses: green-coding-berlin/eco-ci-energy-estimation@main
+        with:
+          task: start-measurement
+
       - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
       - uses: actions/setup-python@bd6b4b6205c4dbad673328db7b31b7fab9e241c0
         with:
@@ -50,3 +59,15 @@ jobs:
         if: matrix.tox == 'typing'
       - run: pip install tox
       - run: tox run -e ${{ matrix.tox }}
+
+      - name: Eco-CI Measurement
+        uses: green-coding-berlin/eco-ci-energy-estimation@main
+        with:
+          task: get-measurement
+          label: 'tests-${{ matrix.name }}'
+
+      - name: Eco-CI Results
+        uses: green-coding-berlin/eco-ci-energy-estimation@main
+        with:
+          task: display-results
+
