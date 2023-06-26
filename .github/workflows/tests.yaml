@@ -41,7 +41,7 @@ jobs:
           - {name: Typing, python: '3.11', os: ubuntu-latest, tox: typing}
     steps:
       - name: Eco-CI Init
-        uses: green-coding-berlin/eco-ci-energy-estimation@main
+        uses: green-coding-berlin/eco-ci-energy-estimation@v2
         with:
           task: start-measurement
 
@@ -61,13 +61,13 @@ jobs:
       - run: tox run -e ${{ matrix.tox }}
 
       - name: Eco-CI Measurement
-        uses: green-coding-berlin/eco-ci-energy-estimation@main
+        uses: green-coding-berlin/eco-ci-energy-estimation@v2
         with:
           task: get-measurement
           label: 'tests-${{ matrix.name }}'
 
       - name: Eco-CI Results
-        uses: green-coding-berlin/eco-ci-energy-estimation@main
+        uses: green-coding-berlin/eco-ci-energy-estimation@v2
         with:
           task: display-results
 
