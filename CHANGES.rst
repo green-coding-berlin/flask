@@ -1,13 +1,15 @@
 Version 3.0.0
 -------------
 
-Unreleased
+Released 2023-09-30
 
 -   Remove previously deprecated code. :pr:`5223`
 -   Deprecate the ``__version__`` attribute. Use feature detection, or
     ``importlib.metadata.version("flask")``, instead. :issue:`5230`
 -   Restructure the code such that the Flask (app) and Blueprint
     classes have Sans-IO bases. :pr:`5127`
+-   Allow self as an argument to url_for. :pr:`5264`
+-   Require Werkzeug >= 3.0.0.
 
 
 Version 2.3.3
